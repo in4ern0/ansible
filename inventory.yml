@@ -1,0 +1,67 @@
+web ansible_host=
+db ansible_host=
+mail ansible_host=
+web2 ansible_host=
+Inventory Parameters:
+• ansible_connection – ssh/winrm/localhost
+• ansible_port – 22/5986
+• ansible_user – root/administrator
+• ansible_ssh_pass - Password  ansible_connection=ssh
+ansible_connection=winrm
+ansible_connection=ssh
+ansible_connection=winrm
+localhost ansible_connection=localhost
+
+
+[webservers]
+web1.example.com
+Web2.example.com
+
+[dbservers]
+db1.example.com
+db2.example.com
+
+[webservers:children]
+webservers_us
+Webservers_eu
+
+[webservers_us]
+server1_us.com ansible_host=192.168.8.101
+server2_us.com ansible_host=192.168.8.102
+
+[webservers_eu]
+server1_eu.com ansible_host=10.12.0.101
+server2_eu.com ansible_host=10.12.0.102
+
+
+
+
+all:
+  children:
+     webservers:
+        hosts:
+          web1.example.com:
+          web2.example.com:
+     dbservers:
+        hosts:
+          db1.example.com:
+          db2.example.com:
+
+all:
+  children:
+    webservers:
+      children:
+        webservers_us:
+          hosts:
+            server1_us.com:
+                    ansible_host: 192.168.8.101
+            server2_us.com:
+                    ansible_host: 192.168.8.102
+        webservers_eu:
+          hosts:
+            server1_eu.com:
+                    ansible_host: 10.12.0.101
+            server2_eu.com:
+                    ansible_host: 10.12.0.102
+
+
