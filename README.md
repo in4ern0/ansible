@@ -1,2 +1,2 @@
-# ansible
-For Ansible
+ansible-config list - #Lists all configurations
+
