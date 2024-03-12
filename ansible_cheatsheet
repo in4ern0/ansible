@@ -18,6 +18,7 @@ DEFAULT_GATHERING(env: ANSIBLE_GATHERING) = explicit
 
 ansible target_name -m ping -i hosts.yml
 ansible target_name* -m ping -i hosts.yml
+ansible target_name -i hosts.yml -m shell -a 'echo $HOSTNAME'
 
 ansible-playbook -i hosts.yml playbook.yml --check -- like a dry-run will show result without modifying 
 ansible-playbook -i hosts.yml playbook.yml --check --diff - will compare and will show result without modifying 
