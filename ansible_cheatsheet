@@ -16,14 +16,15 @@ DEFAULT_GATHERING(env: ANSIBLE_GATHERING) = explicit
 
 /opt/web-playbooks/ansible.cfg --- gathering = explicit
 
+ansible target_name -m ping -i hosts.yml
+ansible target_name* -m ping -i hosts.yml
 
+ansible-playbook -i hosts.yml playbook.yml --check -- like a dry-run will show result without modifying 
+ansible-playbook -i hosts.yml playbook.yml --check --diff - will compare and will show result without modifying 
+ansible-playbook -i hosts.yml playbook.yml --syntax-check - check errors
 
-ansible-playbook -i hosts.yml merchantware-dev-api.yml --check -- like a dry-run will show result without modifying 
-ansible-playbook -i hosts.yml merchantware-dev-api.yml --check --diff - will compare and will show result without modifying 
-ansible-playbook -i hosts.yml merchantware-dev-api.yml --syntax-check - check errors
-
-ansible-lint merchantware-dev-api.yml - catch all style related issue and erros to show you without modifying 
+ansible-lint playbook.yml - catch all style related issue and erros to show you without modifying 
 
 ansible-playbook -i hosts.yml merchantware-dev-api.yml -vv - run playbook
 
-ansible-playbook -i hosts.yml --extra-vars "dns_server=10.2.2.6" merchantware-dev-api.yml - will overwrite the variables in playbook
+ansible-playbook -i hosts.yml --extra-vars "dns_server=10.2.2.6" playbook.yml - will overwrite the variables in playbook
