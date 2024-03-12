@@ -1,0 +1,25 @@
+#Start SSH agent (if not already running)
+MYAGENTS=(`pgrep -U $USER -f ^ssh-agent$ | sort -n`)
+
+echo "Found ${#MYAGENTS[@]} ssh-agents."
+
+# Let's try to take over the agents, like we do every night Pinky!
+if [[ "${MYAGENTS[@]}" ]]; then
+  KEEPER=${MYAGENTS[0]}
+  echo "KEEPER: $KEEPER"
+  OUTCAST=${MYAGENTS[@]:1}
+  [[ "$OUTCAST" ]] && { echo "Goodbye agent $OUTCAST"; kill $OUTCAST; }
+  SSH_AUTH_SOCK=`awk '/tmp\/ssh/ {print $NF}' /proc/$KEEPER/net/unix`
+  export SSH_AUTH_SOCK
+  SSH_AGENT_PID=$KEEPER
+  export SSH_AGENT_PID
+else
+  echo "No existing ssh-agent found. Starting a new one."
+  eval `ssh-agent`
+fi
+
+# Add your key path to the SSH agent
+ssh-add /home/user/.ssh/key.pem
+
+# Check if any identities are loaded into the agent
+ssh-add -l | grep "The agent has no identities" && ssh-add
